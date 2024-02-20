@@ -2,9 +2,7 @@ import Image from "next/image";
 import {Metadata, ResolvingMetadata} from "next";
 
 
-export async function generateMetadata(
-    parent: ResolvingMetadata
-): Promise<Metadata> {
+export async function generateMetadata(): Promise<Metadata> {
     const image = "https://boto.io/_next/image/?url=%2Fboto_header_128.png&w=3840&q=75";
     const url = "https://google.com/images"
     const fcMetadata: Record<string, string> = {
