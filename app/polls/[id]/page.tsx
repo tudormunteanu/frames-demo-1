@@ -55,7 +55,6 @@ export async function generateMetadata(
         fcMetadata[`fc:frame:button:${index + 1}`] = option;
     })
 
-
     return {
         title: poll.title,
         openGraph: {
@@ -68,18 +67,6 @@ export async function generateMetadata(
         metadataBase: new URL(process.env['HOST'] || '')
     }
 }
-function getMeta(
-    poll: Poll
-) {
-    // This didn't work for some reason
-    return (
-        <Head>
-            <meta property="og:image" content="" key="test"></meta>
-            <meta property="og:title" content="My page title" key="title"/>
-        </Head>
-    );
-}
-
 
 export default async function Page({params}: { params: {id: string}}) {
     const poll = await getPoll(params.id);

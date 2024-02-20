@@ -12,4 +12,17 @@ export type Poll = {
   created_at: number;
 };
 
+export type Game = {
+  id: string;
+  player: string;
+  level: number;
+  created_at: number;
+}
+
+export type Level = {
+  id: string;
+  text: string;
+  correct_answer: boolean;
+}
+
 export const POLL_EXPIRY = 60 * 60 * 24 * 180; // Expire polls after 3 months
