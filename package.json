@@ -27,5 +27,6 @@
   },
   "devDependencies": {
     "eslint": "^8.56.0"
-  }
+  },
+  "packageManager": "yarn@1.22.19"
 }
