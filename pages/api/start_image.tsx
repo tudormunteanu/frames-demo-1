@@ -29,7 +29,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     flexDirection: 'column',
                     padding: 20,
                 }}>
-                    <h2 style={{textAlign: 'center', color: 'lightgray'}}>Let's go!</h2>
+                    <h2 style={{textAlign: 'center', color: 'lightgray'}}>
+                        Let's a-go, Mario!
+                    </h2>
                 </div>
             </div>
             ,
