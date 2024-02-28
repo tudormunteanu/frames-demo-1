@@ -5,7 +5,8 @@ import { getGame, updateGame, isGameOver, getFrameVersion } from "@/app/actions"
 
 const HUB_URL = process.env['HUB_URL']
 const client = HUB_URL ? getSSLHubRpcClient(HUB_URL) : undefined;
-const API_BASE_URL = `${process.env['HOST']}/api`;
+const APP_URL = process.env['HOST'] || "https://replaceme.com";
+const API_BASE_URL = `${APP_URL}/api`;
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method !== 'POST') {
@@ -22,7 +23,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             if (result && result.isOk() && result.value.valid) {
                 validatedMessage = result.value.message;
             }
-            // Also validate the frame url matches the expected url
             let urlBuffer = validatedMessage?.data?.frameActionBody?.url || [];
             const urlString = Buffer.from(urlBuffer).toString('utf-8');
             if (validatedMessage && !urlString.startsWith(process.env['HOST'] || '')) {
@@ -55,7 +55,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }
         const postUrl = `${API_BASE_URL}/next?version=${version}`;
 
-        // Return an HTML response
+        const sharingText = encodeURIComponent(`Can you guess more than ${game.correctAnswers} MVPs?`);
+        const sharingUrl = `https://warpcast.com/~/compose?text=${sharingText}&embeds[]=${encodeURIComponent(APP_URL)}`
+
         res.setHeader('Content-Type', 'text/html');
         res.status(200).send(`
 <!DOCTYPE html>
@@ -72,6 +74,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     isGameOver_ ? 
         `
         <meta name="fc:frame:button:1" content="Share">
+        <meta name="fc:frame:button:1:action" content="link">
+        <meta name="fc:frame:button:1:target" content="${sharingUrl}">
         `
     :
         `

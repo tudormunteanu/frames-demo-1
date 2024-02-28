@@ -26,4 +26,5 @@ export const levels: Level[] = [
         id: 4,
         mvp: true
     }
+    // add the first SpaceX rocket that exploded
 ];
