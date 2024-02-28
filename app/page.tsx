@@ -7,7 +7,7 @@ export async function generateMetadata(): Promise<Metadata> {
     const fcMetadata: Record<string, string> = {
         "fc:frame": "vNext",
         "fc:frame:post_url": `${API_BASE_URL}/start`,
-        "fc:frame:image": `${API_BASE_URL}/splash`,
+        "fc:frame:image": `${API_BASE_URL}/images/splash`,
         "fc:frame:button:1": "Can you guess them all?",
     };
 

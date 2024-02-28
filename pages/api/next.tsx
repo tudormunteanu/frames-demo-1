@@ -51,9 +51,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         let isGameOver_ = isGameOver(game);
         let nextLevel = game.currentLevel + 1;
         if (isGameOver_) {
-            imageUrl = `${API_BASE_URL}/over?version=${version}&correct=${game.correctAnswers}`;
+            imageUrl = `${API_BASE_URL}/images/over?version=${version}&correct=${game.correctAnswers}`;
         } else {
-            imageUrl = `${API_BASE_URL}/level?id=${nextLevel}&version=${version}`;
+            imageUrl = `${API_BASE_URL}/images/level?id=${nextLevel}&version=${version}`;
         }
         const postUrl = `${API_BASE_URL}/next?version=${version}`;
 

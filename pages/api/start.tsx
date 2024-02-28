@@ -47,7 +47,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const version = getFrameVersion();
 
         let nextLevel = game.currentLevel + 1;
-        const imageUrl = `${API_BASE_URL}/level?id=${nextLevel}&version=${version}`;
+        const imageUrl = `${API_BASE_URL}/images/level?id=${nextLevel}&version=${version}`;
         const postUrl = `${API_BASE_URL}/next?version=${version}`;
 
         // Return an HTML response
