@@ -1,9 +1,8 @@
 export type Game = {
   id: string;
   player: number;
-  level: number;
-  created_at: number;
-  correct_answers: number;
+  correctAnswers: number;
+  currentLevel: number;
 }
 
 export type Level = {

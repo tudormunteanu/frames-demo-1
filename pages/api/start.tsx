@@ -43,18 +43,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }
 
         const game = getGame(fid);
-        updateGame(game, buttonId);
 
         const version = getFrameVersion();
 
-        let imageUrl
-        let isGameOver_ = isGameOver(game);
         let nextLevel = game.currentLevel + 1;
-        if (isGameOver_) {
-            imageUrl = `${API_BASE_URL}/over?version=${version}&correct=${game.correctAnswers}`;
-        } else {
-            imageUrl = `${API_BASE_URL}/level?id=${nextLevel}&version=${version}`;
-        }
+        const imageUrl = `${API_BASE_URL}/level?id=${nextLevel}&version=${version}`;
         const postUrl = `${API_BASE_URL}/next?version=${version}`;
 
         // Return an HTML response
@@ -63,25 +56,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 <!DOCTYPE html>
 <html>
 <head>
-  <title>MVP or not MVP</title>
-  <meta property="og:title" content="MVP or not MVP">
-  <meta property="og:image" content="${imageUrl}">
-  <meta name="fc:frame" content="vNext">
-  <meta name="fc:frame:image" content="${imageUrl}">
-  <meta name="fc:frame:post_url" content="${postUrl}">
-
-  `+(
-    isGameOver_ ? 
-        `
-        <meta name="fc:frame:button:1" content="Share">
-        `
-    :
-        `
-        <meta name="fc:frame:button:1" content="MVP">
-        <meta name="fc:frame:button:2" content="Not MVP">
-        `
-  )+`
-
+    <title>MVP or not MVP</title>
+    <meta property="og:title" content="MVP or not MVP">
+    <meta property="og:image" content="${imageUrl}">
+    <meta name="fc:frame" content="vNext">
+    <meta name="fc:frame:image" content="${imageUrl}">
+    <meta name="fc:frame:post_url" content="${postUrl}">
+    <meta name="fc:frame:button:1" content="MVP">
+    <meta name="fc:frame:button:2" content="Not MVP">
 </head>
 <body></body>
 </html>

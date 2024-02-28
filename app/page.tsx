@@ -6,7 +6,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
     const fcMetadata: Record<string, string> = {
         "fc:frame": "vNext",
-        "fc:frame:post_url": `${API_BASE_URL}/next`,
+        "fc:frame:post_url": `${API_BASE_URL}/start`,
         "fc:frame:image": `${API_BASE_URL}/splash`,
         "fc:frame:button:1": "Can you guess them all?",
     };
@@ -15,7 +15,7 @@ export async function generateMetadata(): Promise<Metadata> {
         title: "MVP or not MVP?",
         openGraph: {
             title: "MVP or not MVP?",
-            images: [`/api/start`],
+            images: [`/api/splash`],
         },
         other: {
             ...fcMetadata,

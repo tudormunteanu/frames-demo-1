@@ -3,35 +3,47 @@
 import { Game } from "@/app/types";
 import { levels } from "@/app/constants";
 
+const runningGames: {[key: number]: Game} = {};
+
 export function getGame(fid: number): Game {
-  return {
-    id: "1",
-    player: fid,
-    level: 1,
-    created_at: 1,
-    correct_answers: 0
-  };
+  if(runningGames[fid] === undefined) {
+    runningGames[fid] = {
+      id: "1",
+      player: fid,
+      correctAnswers: 0,
+      currentLevel: 0
+    };
+  }
+  return runningGames[fid];
 }
 
-export function updateGame(game: Game, levelId: number, buttonId: number) {
+export function updateGame(game: Game, buttonId: number) {
+
+  const levelId = game.currentLevel;
+  console.log("currentLevel", levelId);
+
+  if(levelId >= levels.length)
+    return;
 
   const buttonValues: {[key: number]: boolean} = {
       1: true,
       2: false
   };
 
-  if(!(levelId > 0) || !(levelId < levels.length))
-    return;
-
-  game.correct_answers += levels[levelId].mvp === buttonValues[buttonId] ? 1 : 0;
+  game.correctAnswers += levels[levelId].mvp === buttonValues[buttonId] ? 1 : 0;
+  game.currentLevel += 1;
 
   const fid = game.player;
-  console.log("step id from API: ", levelId);  
   console.log("fid", fid, "buttonId", buttonValues[buttonId]);
-  console.log("correct?", levels[levelId].mvp === buttonValues[buttonId]);
+  console.log("correctAnswers", game.correctAnswers);
   console.log("----");
 }
 
-export function isGameOver(levelId: number): boolean {
-  return levelId >= levels.length;
+export function isGameOver(game: Game): boolean {
+  return game.currentLevel >= levels.length;
+}
+
+export function getFrameVersion(): number {
+  // Use this version to avoid caching issues.
+  return Date.now() / 1000;
 }
