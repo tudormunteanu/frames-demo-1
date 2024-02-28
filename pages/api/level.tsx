@@ -1,17 +1,20 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import sharp from 'sharp';
-import {Poll} from "@/app/types";
-import {kv} from "@vercel/kv";
 import satori from "satori";
-import { join } from 'path';
+import {join} from 'path';
 import * as fs from "fs";
+
+import { levels } from "@/app/constants";
 
 const fontPath = join(process.cwd(), 'Roboto-Regular.ttf')
 let fontData = fs.readFileSync(fontPath)
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     try {
-        const pollId = req.query['id'];
+        const stepId: number = parseInt((req.query['id'] || "0") as string);
+        console.log("step id from image: ", stepId);
+
+        const level = levels.find(l => l.id === stepId);
 
         const svg = await satori(
             <div style={{
@@ -30,7 +33,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     flexDirection: 'column',
                     padding: 20,
                 }}>
-                    <h2 style={{textAlign: 'center', color: 'lightgray'}}>Level 1</h2>
+                    <span style={{color: 'lightgray'}}>
+                        {level?.id}/{levels.length}
+                    </span>
+                    <h2 style={{
+                        textAlign: 'left',
+                        color: 'lightgray',
+                    }}>
+                        {level?.name || "No such level"}
+                    </h2>
                 </div>
             </div>
             ,

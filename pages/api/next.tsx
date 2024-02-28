@@ -1,10 +1,11 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import {Poll, POLL_EXPIRY} from "@/app/types";
-import {kv} from "@vercel/kv";
 import {getSSLHubRpcClient, Message} from "@farcaster/hub-nodejs";
+
+import { getGame, updateGame, isGameOver } from "@/app/actions";
 
 const HUB_URL = process.env['HUB_URL']
 const client = HUB_URL ? getSSLHubRpcClient(HUB_URL) : undefined;
+const API_BASE_URL = `${process.env['HOST']}/api`;
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method !== 'POST') {
@@ -41,28 +42,53 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             fid = req.body?.untrustedData?.fid || 0;
         }
 
-        const imageUrl = `${process.env['HOST']}/api/image?id=1`;
+        const game = getGame(fid);
+        const levelId: number = parseInt((req.query['id'] || "0") as string);
+        updateGame(game, levelId, buttonId);    
+
+        // Use this version to avoid caching issues.
+        // TODO: would this not cause problems across multiple games?
+        // Why not have a Game ID?
+        const version: number = Date.now() / 1000;
+
+        let imageUrl
+        let isGameOver_ = isGameOver(levelId);
+        if (isGameOver_) {
+            imageUrl = `${API_BASE_URL}/over?version=${version}&correct=${game.correct_answers}`;
+        } else {
+            imageUrl = `${API_BASE_URL}/level?id=${levelId + 1}&version=${version}`;
+        }
+        const postUrl = `${API_BASE_URL}/next?id=${levelId + 1}&version=${version}`;
 
         // Return an HTML response
         res.setHeader('Content-Type', 'text/html');
         res.status(200).send(`
-  <!DOCTYPE html>
-  <html>
-    <head>
-      <title>Vote Recorded</title>
-      <meta property="og:title" content="Vote Recorded">
-      <meta property="og:image" content="${imageUrl}">
-      <meta name="fc:frame" content="vNext">
-      <meta name="fc:frame:image" content="${imageUrl}">
-      <meta name="fc:frame:post_url" content="${process.env['HOST']}/api/next">
-      <meta name="fc:frame:button:1" content="Create your poll">
-      <meta name="fc:frame:button:1:action" content="post_redirect">
-    </head>
-    <body>
-      <p>foo</p>
-    </body>
-  </html>
-`);
+<!DOCTYPE html>
+<html>
+<head>
+  <title>MVP or not MVP</title>
+  <meta property="og:title" content="MVP or not MVP">
+  <meta property="og:image" content="${imageUrl}">
+  <meta name="fc:frame" content="vNext">
+  <meta name="fc:frame:image" content="${imageUrl}">
+  <meta name="fc:frame:post_url" content="${postUrl}">
+
+  `+(
+    isGameOver_ ? 
+        `
+        <meta name="fc:frame:button:1" content="Share">
+        `
+    :
+        `
+        <meta name="fc:frame:button:1" content="MVP">
+        <meta name="fc:frame:button:2" content="Not MVP">
+        `
+  )+`
+
+</head>
+<body></body>
+</html>
+        `);
     } catch (error) {
         console.error(error);
         res.status(500).send('Error generating image');
