@@ -34,7 +34,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     padding: 20,
                 }}>
                     <span style={{color: 'lightgray'}}>
-                        {level?.id}/{levels.length}
+                        {(level?.id || 0) + 1}/{levels.length}
                     </span>
                     <h2 style={{
                         textAlign: 'left',

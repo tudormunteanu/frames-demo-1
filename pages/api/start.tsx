@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import {getSSLHubRpcClient, Message} from "@farcaster/hub-nodejs";
 
-import { getGame, updateGame, isGameOver, getFrameVersion } from "@/app/actions";
+import { getGame, getFrameVersion } from "@/app/actions";
 
 const HUB_URL = process.env['HUB_URL']
 const client = HUB_URL ? getSSLHubRpcClient(HUB_URL) : undefined;
@@ -32,13 +32,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             return res.status(400).send(`Failed to validate message: ${e}`);
         }
 
-        let buttonId = 0, fid = 0;
-        // If HUB_URL is not provided, don't validate and fall back to untrusted data
+        let fid = 0;
         if (client) {
-            buttonId = validatedMessage?.data?.frameActionBody?.buttonIndex || 0;
             fid = validatedMessage?.data?.fid || 0;
         } else {
-            buttonId = req.body?.untrustedData?.buttonIndex || 0;
             fid = req.body?.untrustedData?.fid || 0;
         }
 
@@ -46,8 +43,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         const version = getFrameVersion();
 
-        let nextLevel = game.currentLevel + 1;
-        const imageUrl = `${API_BASE_URL}/images/level?id=${nextLevel}&version=${version}`;
+        const imageUrl = `${API_BASE_URL}/images/level?id=${game.currentLevel}&version=${version}`;
         const postUrl = `${API_BASE_URL}/next?version=${version}`;
 
         // Return an HTML response

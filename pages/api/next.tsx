@@ -33,7 +33,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }
 
         let buttonId = 0, fid = 0;
-        // If HUB_URL is not provided, don't validate and fall back to untrusted data
         if (client) {
             buttonId = validatedMessage?.data?.frameActionBody?.buttonIndex || 0;
             fid = validatedMessage?.data?.fid || 0;
@@ -49,11 +48,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         let imageUrl
         let isGameOver_ = isGameOver(game);
-        let nextLevel = game.currentLevel + 1;
         if (isGameOver_) {
             imageUrl = `${API_BASE_URL}/images/over?version=${version}&correct=${game.correctAnswers}`;
         } else {
-            imageUrl = `${API_BASE_URL}/images/level?id=${nextLevel}&version=${version}`;
+            imageUrl = `${API_BASE_URL}/images/level?id=${game.currentLevel}&version=${version}`;
         }
         const postUrl = `${API_BASE_URL}/next?version=${version}`;
 
