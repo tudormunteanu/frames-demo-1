@@ -1,14 +1,17 @@
 import {Metadata} from "next";
 
-import {API_BASE_URL, APP_URL} from "@/app/constants";
+import {API_BASE_URL} from "@/app/constants";
+import { getFrameVersion } from "@/app/actions";
 
 
 export async function generateMetadata(): Promise<Metadata> {
 
+    const version = await getFrameVersion();
+
     const fcMetadata: Record<string, string> = {
         "fc:frame": "vNext",
         "fc:frame:post_url": `${API_BASE_URL}/start`,
-        "fc:frame:image": `${API_BASE_URL}/images/splash`,
+        "fc:frame:image": `${API_BASE_URL}/images/splash?version=${version}`,
         "fc:frame:button:1": "Can you guess them all?",
     };
 
@@ -25,7 +28,7 @@ export async function generateMetadata(): Promise<Metadata> {
     }
 }
 
-export default async function Page({params}: { params: {id: string}}) {
+export default async function Page() {
     return <p>hello</p>;
 
 }

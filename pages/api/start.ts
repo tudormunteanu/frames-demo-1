@@ -1,8 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import {getSSLHubRpcClient, Message} from "@farcaster/hub-nodejs";
-
-const HUB_URL = process.env['HUB_URL']
-const client = HUB_URL ? getSSLHubRpcClient(HUB_URL) : undefined;
+import {parseFramePayload} from "@/app/frames"
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     // TODO: this is ugly
@@ -11,29 +8,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         res.status(405).end(`Method ${req.method} Not Allowed`);
     }
 
-    let validatedMessage : Message | undefined = undefined;
     try {
-        const frameMessage = Message.decode(Buffer.from(req.body?.trustedData?.messageBytes || '', 'hex'));
-        const result = await client?.validateMessage(frameMessage);
-        if (result && result.isOk() && result.value.valid) {
-            validatedMessage = result.value.message;
-        }
-        // Also validate the frame url matches the expected url
-        let urlBuffer = validatedMessage?.data?.frameActionBody?.url || [];
-        const urlString = Buffer.from(urlBuffer).toString('utf-8');
-        if (validatedMessage && !urlString.startsWith(process.env['HOST'] || '')) {
-            return res.status(400).send(`Invalid frame url: ${urlBuffer}`);
-        }
+        const { fid } = await parseFramePayload(req.body);
+        console.log({fid})
+        res.status(302).setHeader('Location', '/start').end();
     } catch (e) {
-        return res.status(400).send(`Failed to validate message: ${e}`);
+        res.status(400).send(`Failed validate action: ${e}`);
     }
-
-    let fid = 0;
-    if (client) {
-        fid = validatedMessage?.data?.fid || 0;
-    } else {
-        fid = req.body?.untrustedData?.fid || 0;
-    }
-
-    res.status(302).setHeader('Location', '/start').end();
 }
