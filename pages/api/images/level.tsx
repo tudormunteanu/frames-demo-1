@@ -4,7 +4,7 @@ import satori from "satori";
 import {join} from 'path';
 import * as fs from "fs";
 
-import { levels } from "@/app/constants";
+import { levels, APP_URL } from "@/app/constants";
 
 const fontPath = join(process.cwd(), 'Roboto-Regular.ttf')
 let fontData = fs.readFileSync(fontPath)
@@ -12,9 +12,9 @@ let fontData = fs.readFileSync(fontPath)
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     try {
         const stepId: number = parseInt((req.query['id'] || "0") as string);
-        console.log("step id from image: ", stepId);
 
         const level = levels.find(l => l.id === stepId);
+        const imageUrl = `${APP_URL}/levels/pfp.png`;
 
         const svg = await satori(
             <div style={{
@@ -26,7 +26,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 backgroundColor: 'f4f4f4',
                 padding: 50,
                 lineHeight: 1.2,
-                fontSize: 24,
+                fontSize: 22,
             }}>
                 <div style={{
                     display: 'flex',
@@ -36,12 +36,39 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     <span style={{color: 'lightgray'}}>
                         {(level?.id || 0) + 1}/{levels.length}
                     </span>
-                    <h2 style={{
-                        textAlign: 'left',
-                        color: 'lightgray',
+
+                    <div style={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        paddingTop: 10,
                     }}>
-                        {level?.name || "No such level"}
-                    </h2>
+                        <div
+                            style={{
+                                display: 'flex',
+                                width: '30%',
+                            }}
+                        >
+                            <img 
+                                src={imageUrl}
+                                alt={level?.name} 
+                            />
+                        </div>
+                        <div
+                            style={{
+                                display: 'flex',
+                                width: '70%',
+                            }}
+                        >
+                            <h2 style={{
+                                textAlign: 'left',
+                                color: 'lightgray',
+                                margin: 0,
+                                marginLeft: 20,
+                            }}>
+                                {level?.name || "No such level"}
+                            </h2>
+                        </div>
+                    </div>
                 </div>
             </div>
             ,

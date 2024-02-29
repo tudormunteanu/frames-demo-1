@@ -29,7 +29,6 @@ export async function getGame(fid: number): Promise<Game> {
 export async function updateGame(game: Game, buttonId: number) {
 
   const levelId = game.currentLevel;
-  console.log("currentLevel", levelId);
 
   if(levelId >= levels.length)
     return;

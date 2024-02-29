@@ -10,24 +10,25 @@ export const levels: Level[] = [
         mvp: true
     },
     {
-        "name": "Apple Vision",
+        "name": "Facebook Activity Feeds circa 2008. Fresh ads platform, surpased MySpace",
         id: 1,
         mvp: true
     },
     {
-        "name": "iPhone 1",
+        "name": "Apple Vision",
         id: 2,
         mvp: true
     },
     {
-        "name": "Tesla Roadster",
+        "name": "iPhone 1",
         id: 3,
         mvp: true
     },
     {
-        "name": "Facebook circa 2008, which had not advertising, but had students from Stanford.",
+        "name": "Tesla Roadster",
         id: 4,
         mvp: true
-    }
+    },
+
     // add the first SpaceX rocket that exploded
 ];
