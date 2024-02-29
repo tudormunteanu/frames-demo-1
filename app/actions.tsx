@@ -5,7 +5,7 @@ import { levels } from "@/app/constants";
 
 const runningGames: {[key: number]: Game} = {};
 
-export function getGame(fid: number): Game {
+export async function getGame(fid: number): Promise<Game> {
   if(runningGames[fid] === undefined) {
     runningGames[fid] = {
       id: "1",
@@ -17,7 +17,7 @@ export function getGame(fid: number): Game {
   return runningGames[fid];
 }
 
-export function updateGame(game: Game, buttonId: number) {
+export async function updateGame(game: Game, buttonId: number) {
 
   const levelId = game.currentLevel;
   console.log("currentLevel", levelId);
@@ -39,11 +39,11 @@ export function updateGame(game: Game, buttonId: number) {
   console.log("----");
 }
 
-export function isGameOver(game: Game): boolean {
+export async function isGameOver(game: Game): Promise<boolean> {
   return game.currentLevel >= levels.length;
 }
 
-export function getFrameVersion(): number {
+export async function getFrameVersion(): Promise<number> {
   // Use this version to avoid caching issues.
   return Date.now() / 1000;
 }

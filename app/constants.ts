@@ -1,5 +1,8 @@
 import { Level } from '@/app/types';
 
+export const APP_URL = process.env['HOST'] || "https://replaceme.com";
+export const API_BASE_URL = `${process.env['HOST']}/api`;
+
 export const levels: Level[] = [
     {
         name: "Google Glass",

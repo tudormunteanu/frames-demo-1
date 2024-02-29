@@ -10,3 +10,8 @@ export type Level = {
   name: string;
   mvp: boolean;
 }
+
+export type MetadataProps = {
+  params: { id: string }
+  searchParams: { [key: string]: string | string[] | undefined }
+}

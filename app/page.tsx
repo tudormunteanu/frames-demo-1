@@ -1,6 +1,7 @@
 import {Metadata} from "next";
 
-const API_BASE_URL = `${process.env['HOST']}/api`;
+import {API_BASE_URL, APP_URL} from "@/app/constants";
+
 
 export async function generateMetadata(): Promise<Metadata> {
 
@@ -25,10 +26,6 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function Page({params}: { params: {id: string}}) {
-    return(
-        <>
-            <p>hello</p>
-        </>
-    );
+    return <p>hello</p>;
 
 }

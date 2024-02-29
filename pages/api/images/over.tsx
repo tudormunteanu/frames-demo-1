@@ -9,7 +9,7 @@ let fontData = fs.readFileSync(fontPath)
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     try {
-        const correct = parseInt((req.query['correct'] || "0") as string);
+        const score = parseInt((req.query['score'] || "0") as string);
 
         const svg = await satori(
             <div style={{
@@ -31,7 +31,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     <h2 style={{textAlign: 'center', color: 'lightgray'}}>
                         Done!
 
-                        Correct answers: {correct}
+                        Correct answers: {score}
                     </h2>
                 </div>
             </div>
