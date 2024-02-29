@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import {parseFramePayload} from "@/app/frames"
 
-import { getGame, updateGame, isGameOver } from "@/app/actions";
+import { getGame, updateGame, isGameOver, resetGame } from "@/app/actions";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method !== 'POST') {
@@ -18,6 +18,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     let nextUrl;
     if (isGameOver_) {
+        await resetGame(fid);
         nextUrl = `/over?score=${game.correctAnswers}`;
     } else {
         nextUrl = `/next?levelId=${game.currentLevel}`;

@@ -1,20 +1,29 @@
 "use server";
 
+import { kv } from '@vercel/kv';
 import { Game } from "@/app/types";
 import { levels } from "@/app/constants";
 
-const runningGames: {[key: number]: Game} = {};
+function getGameId(fid: number): string {
+  return `fid:${fid.toString()}`;
+}
 
 export async function getGame(fid: number): Promise<Game> {
-  if(runningGames[fid] === undefined) {
-    runningGames[fid] = {
-      id: "1",
-      player: fid,
-      correctAnswers: 0,
-      currentLevel: 0
-    };
+  const gameId = getGameId(fid);
+
+  let runningGame = await kv.get(gameId);
+  if(runningGame !== null) {
+    return runningGame as Game;
   }
-  return runningGames[fid];
+
+  const newGame = {
+    id: gameId,
+    player: fid,
+    correctAnswers: 0,
+    currentLevel: 0
+  }
+  await kv.set(gameId, newGame);
+  return newGame as Game;
 }
 
 export async function updateGame(game: Game, buttonId: number) {
@@ -33,10 +42,8 @@ export async function updateGame(game: Game, buttonId: number) {
   game.correctAnswers += levels[levelId].mvp === buttonValues[buttonId] ? 1 : 0;
   game.currentLevel += 1;
 
-  const fid = game.player;
-  console.log("fid", fid, "buttonId", buttonValues[buttonId]);
-  console.log("correctAnswers", game.correctAnswers);
-  console.log("----");
+  const gameId = getGameId(game.player);
+  await kv.set(gameId, game);
 }
 
 export async function isGameOver(game: Game): Promise<boolean> {
@@ -46,4 +53,9 @@ export async function isGameOver(game: Game): Promise<boolean> {
 export async function getFrameVersion(): Promise<number> {
   // Use this version to avoid caching issues.
   return Date.now() / 1000;
+}
+
+export async function resetGame(fid: number) {
+  const gameId = getGameId(fid);
+  await kv.del(gameId);
 }
