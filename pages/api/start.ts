@@ -10,7 +10,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     try {
         const { fid } = await parseFramePayload(req.body);
-        console.log({fid})
         res.status(302).setHeader('Location', '/start').end();
     } catch (e) {
         res.status(400).send(`Failed validate action: ${e}`);

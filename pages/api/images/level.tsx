@@ -91,7 +91,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         res.setHeader('Cache-Control', 'max-age=10');
         res.send(pngBuffer);
     } catch (error) {
-        console.error(error);
         res.status(500).send('Error generating image');
     }
 }
