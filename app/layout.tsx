@@ -1,4 +1,4 @@
-import { Analytics } from "@vercel/analytics/react"
+import { Analytics } from "@vercel/analytics/react";
 
 import "./globals.css";
 import { GeistSans } from "geist/font/sans";
