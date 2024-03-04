@@ -74,8 +74,8 @@ export async function resetGame(fid: number) {
 
 export async function generateRandomLevels(): Promise<Level[]> {
   const shuffledTmpLevels = tmpLevels.sort(() => Math.random() - 0.5);
-
-  return shuffledTmpLevels.map((level, index) => {
+  console.log({shuffledTmpLevels});
+  return shuffledTmpLevels.slice(0, 5).map((level, index) => {
     return {
       ...level,
       id: index

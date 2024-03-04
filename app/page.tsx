@@ -12,7 +12,7 @@ export async function generateMetadata(): Promise<Metadata> {
         "fc:frame": "vNext",
         "fc:frame:post_url": `${API_BASE_URL}/start`,
         "fc:frame:image": `${API_BASE_URL}/images/splash?version=${version}`,
-        "fc:frame:button:1": "Can you guess them all?",
+        "fc:frame:button:1": "Can you guess them all? Let's a-go, Mario!",
     };
 
     return {

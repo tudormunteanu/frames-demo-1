@@ -8,6 +8,7 @@ export type Game = {
 
 export type Level = {
   id: number;
+  file: string;
   name: string;
   mvp: boolean;
 }

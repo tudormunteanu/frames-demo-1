@@ -1,4 +1,3 @@
-import type { NextApiRequest, NextApiResponse } from 'next';
 import sharp from 'sharp';
 import satori from "satori";
 import {join} from 'path';
@@ -7,22 +6,25 @@ import * as fs from "fs";
 import { APP_URL } from "@/app/constants";
 import {getGame} from "@/app/actions";
 
+
 const fontPath = join(process.cwd(), 'Roboto-Regular.ttf')
 let fontData = fs.readFileSync(fontPath)
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+export async function GET(req: Request) {
+
+    const { searchParams } = new URL(req.url);
+    const gameId = searchParams.get('gameId') as string;
+    const game = await getGame(gameId);
+
     try {
-        const gameId = req.query['gameId'] as string;
-        const game = await getGame(gameId);
 
         if (game === null) {
-            res.status(404).send('Game not found');
-            return;
+            return new Response('Game not found', {status: 404});
         }
 
         const levels = game.levels;
         const level = levels.find(l => l.id === game.currentLevel);
-        const imageUrl = `${APP_URL}/levels/pfp.png`;
+        const imageUrl = `${APP_URL}/levels/${level?.file}`;
 
         const svg = await satori(
             <div style={{
@@ -89,16 +91,18 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 }]
             })
 
-        // Convert SVG to PNG using Sharp
         const pngBuffer = await sharp(Buffer.from(svg))
             .toFormat('png')
             .toBuffer();
 
-        // Set the content type to PNG and send the response
-        res.setHeader('Content-Type', 'image/png');
-        res.setHeader('Cache-Control', 'max-age=10');
-        res.send(pngBuffer);
+        return new Response(pngBuffer, {
+            headers: {
+                'Content-Type': 'image/png',
+                'Cache-Control': 'max-age=10',
+            },
+        });
     } catch (error) {
-        res.status(500).send('Error generating image');
+        console.error('Error generating image', error);
+        return new Response('Error generating image', {status: 500});        
     }
 }
