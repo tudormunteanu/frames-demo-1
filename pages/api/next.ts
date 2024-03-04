@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import {parseFramePayload} from "@/app/frames"
 
-import { getGame, updateGame, isGameOver, resetGame } from "@/app/actions";
+import { getGameByFid, updateGame, isGameOver, resetGame } from "@/app/actions";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method !== 'POST') {
@@ -10,10 +10,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     const { buttonIndex, fid } = await parseFramePayload(req.body);
+    const game = await getGameByFid(fid);
 
-    const game = await getGame(fid);
+    if (!game) {
+        res.status(404).send(`Game not found for fid: ${fid}`);
+        return;
+    }
+
     updateGame(game, buttonIndex);
-
     const isGameOver_ = await isGameOver(game);
 
     let nextUrl;
@@ -21,7 +25,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         await resetGame(fid);
         nextUrl = `/over?score=${game.correctAnswers}`;
     } else {
-        nextUrl = `/next?levelId=${game.currentLevel}`;
+        nextUrl = `/next?gameId=${game.id}`;
     }
 
     res.status(302).setHeader('Location', nextUrl).end();    

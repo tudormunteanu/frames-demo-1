@@ -3,6 +3,7 @@ export type Game = {
   player: number;
   correctAnswers: number;
   currentLevel: number;
+  levels: Level[];
 }
 
 export type Level = {

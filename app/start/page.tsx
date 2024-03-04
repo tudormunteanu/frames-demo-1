@@ -1,13 +1,18 @@
 import {Metadata} from "next";
 
 import {API_BASE_URL} from "@/app/constants";
-import {getFrameVersion, getGame} from "@/app/actions";
+import {getFrameVersion} from "@/app/actions";
+import {MetadataProps} from "@/app/types";
 
-export async function generateMetadata(): Promise<Metadata> {
+export async function generateMetadata(
+  { searchParams }: MetadataProps,
+): Promise<Metadata> {
 
     const version = await getFrameVersion();
 
-    const imageUrl = `${API_BASE_URL}/images/level?version=${version}`;
+    const { gameId } = searchParams;
+
+    const imageUrl = `${API_BASE_URL}/images/level?gameId=${gameId}&version=${version}`;
 
     const fcMetadata: Record<string, string> = {
         "fc:frame": "vNext",

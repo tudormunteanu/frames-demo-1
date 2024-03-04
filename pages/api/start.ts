@@ -1,5 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import {parseFramePayload} from "@/app/frames"
+import {getOrCreateGame} from "@/app/actions";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     // TODO: this is ugly
@@ -10,7 +11,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     try {
         const { fid } = await parseFramePayload(req.body);
-        res.status(302).setHeader('Location', '/start').end();
+        const game = await getOrCreateGame(fid);
+        const startUrl = `/start?gameId=${game.id}`;
+        res.status(302).setHeader('Location', startUrl).end();
     } catch (e) {
         res.status(400).send(`Failed validate action: ${e}`);
     }

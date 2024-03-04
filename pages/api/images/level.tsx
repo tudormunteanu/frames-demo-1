@@ -4,16 +4,24 @@ import satori from "satori";
 import {join} from 'path';
 import * as fs from "fs";
 
-import { levels, APP_URL } from "@/app/constants";
+import { APP_URL } from "@/app/constants";
+import {getGame} from "@/app/actions";
 
 const fontPath = join(process.cwd(), 'Roboto-Regular.ttf')
 let fontData = fs.readFileSync(fontPath)
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     try {
-        const stepId: number = parseInt((req.query['id'] || "0") as string);
+        const gameId = req.query['gameId'] as string;
+        const game = await getGame(gameId);
 
-        const level = levels.find(l => l.id === stepId);
+        if (game === null) {
+            res.status(404).send('Game not found');
+            return;
+        }
+
+        const levels = game.levels;
+        const level = levels.find(l => l.id === game.currentLevel);
         const imageUrl = `${APP_URL}/levels/pfp.png`;
 
         const svg = await satori(

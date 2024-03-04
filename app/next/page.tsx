@@ -11,9 +11,9 @@ export async function generateMetadata(
 
     const version = await getFrameVersion();
 
-    const { levelId } = searchParams;
+    const { gameId } = searchParams;
 
-    const imageUrl = `${API_BASE_URL}/images/level?id=${levelId}version=${version}`;
+    const imageUrl = `${API_BASE_URL}/images/level?gameId=${gameId}&version=${version}`;
 
     const fcMetadata: Record<string, string> = {
         "fc:frame": "vNext",

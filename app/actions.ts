@@ -1,34 +1,46 @@
 "use server";
 
 import { kv } from '@vercel/kv';
-import { Game } from "@/app/types";
-import { levels } from "@/app/constants";
+import { Game, Level } from "@/app/types";
+import {tmpLevels} from "@/app/constants";
 
 function getGameId(fid: number): string {
+  // Generate a gloabl id
   return `fid:${fid.toString()}`;
 }
 
-export async function getGame(fid: number): Promise<Game> {
-  const gameId = getGameId(fid);
+export async function getOrCreateGame(fid: number): Promise<Game> {
+  const id = getGameId(fid);
 
-  let runningGame = await kv.get(gameId);
+  let runningGame = await kv.get(id) as Game | null;
   if(runningGame !== null) {
     return runningGame as Game;
   }
 
   const newGame = {
-    id: gameId,
+    id: id,
     player: fid,
     correctAnswers: 0,
-    currentLevel: 0
+    currentLevel: 0,
+    levels: await generateRandomLevels(),
   }
-  await kv.set(gameId, newGame);
+  await kv.set(id, newGame);
   return newGame as Game;
+}
+
+export async function getGameByFid(fid: number): Promise<Game | null> {
+  const gameId = getGameId(fid);
+  return await getGame(gameId);
+}
+
+export async function getGame(id: string): Promise<Game | null> {
+  let runningGame = await kv.get(id) as Game;
+  return runningGame;
 }
 
 export async function updateGame(game: Game, buttonId: number) {
 
-  const levelId = game.currentLevel;
+  const {currentLevel: levelId, levels} = game;
 
   if(levelId >= levels.length)
     return;
@@ -46,6 +58,7 @@ export async function updateGame(game: Game, buttonId: number) {
 }
 
 export async function isGameOver(game: Game): Promise<boolean> {
+  const {levels} = game;
   return game.currentLevel >= levels.length;
 }
 
@@ -57,4 +70,15 @@ export async function getFrameVersion(): Promise<number> {
 export async function resetGame(fid: number) {
   const gameId = getGameId(fid);
   await kv.del(gameId);
+}
+
+export async function generateRandomLevels(): Promise<Level[]> {
+  const shuffledTmpLevels = tmpLevels.sort(() => Math.random() - 0.5);
+
+  return shuffledTmpLevels.map((level, index) => {
+    return {
+      ...level,
+      id: index
+    }
+  });
 }
