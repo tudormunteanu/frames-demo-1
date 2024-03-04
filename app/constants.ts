@@ -42,4 +42,9 @@ export const tmpLevels = [
     file: "atlas.png",
     mvp: false
   },
+  {
+    name: "AirBnB, August 2008",
+    file: "airbnb.png",
+    mvp: true
+  },
 ];
