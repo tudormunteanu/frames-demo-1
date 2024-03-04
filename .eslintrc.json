@@ -1,0 +1,11 @@
+{
+  "extends": "next/core-web-vitals",
+  "rules": {
+    // Enforce 2-space indentation
+    "indent": ["error", 2],
+    // Require semicolons
+    "semi": ["error", "always"],
+    // Use double quotes for strings
+    "quotes": ["error", "double"]
+  }
+}

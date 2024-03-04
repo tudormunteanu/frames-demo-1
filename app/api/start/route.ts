@@ -1,4 +1,4 @@
-import {parseFramePayload} from "@/app/frames"
+import {parseFramePayload} from "@/app/frames";
 import {getOrCreateGame} from "@/app/actions";
 
 export async function POST(req: Request) {    
@@ -8,10 +8,10 @@ export async function POST(req: Request) {
     const startUrl = `/start?gameId=${game.id}`;
 
     return new Response(
-      '',
+      "",
       {
         status: 302,
-        headers: {'Location': startUrl}
+        headers: {"Location": startUrl}
       }
     );        
   } catch (e) {

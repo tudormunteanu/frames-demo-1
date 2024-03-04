@@ -1,4 +1,4 @@
-import {parseFramePayload} from "@/app/frames"
+import {parseFramePayload} from "@/app/frames";
 import { getGameByFid, updateGame, isGameOver, resetGame } from "@/app/actions";
 
 export async function POST(req: Request) {
@@ -6,7 +6,7 @@ export async function POST(req: Request) {
   const game = await getGameByFid(fid);
 
   if (!game) {
-    return new Response('Game not found', {status: 404});        
+    return new Response("Game not found", {status: 404});        
   }
 
   updateGame(game, buttonIndex);
@@ -21,10 +21,10 @@ export async function POST(req: Request) {
   }
 
   return new Response(
-    '',
+    "",
     {
       status: 302,
-      headers: {'Location': nextUrl}
+      headers: {"Location": nextUrl}
     }
   );
 }

@@ -1,6 +1,6 @@
 "use server";
 
-import { kv } from '@vercel/kv';
+import { kv } from "@vercel/kv";
 import { Game, Level } from "@/app/types";
 import {tmpLevels} from "@/app/constants";
 
@@ -23,7 +23,7 @@ export async function getOrCreateGame(fid: number): Promise<Game> {
     correctAnswers: 0,
     currentLevel: 0,
     levels: await generateRandomLevels(),
-  }
+  };
   await kv.set(id, newGame);
   return newGame as Game;
 }
@@ -46,8 +46,8 @@ export async function updateGame(game: Game, buttonId: number) {
     return;
 
   const buttonValues: {[key: number]: boolean} = {
-      1: true,
-      2: false
+    1: true,
+    2: false
   };
 
   game.correctAnswers += levels[levelId].mvp === buttonValues[buttonId] ? 1 : 0;
@@ -74,11 +74,10 @@ export async function resetGame(fid: number) {
 
 export async function generateRandomLevels(): Promise<Level[]> {
   const shuffledTmpLevels = tmpLevels.sort(() => Math.random() - 0.5);
-  console.log({shuffledTmpLevels});
   return shuffledTmpLevels.slice(0, 5).map((level, index) => {
     return {
       ...level,
       id: index
-    }
+    };
   });
 }
