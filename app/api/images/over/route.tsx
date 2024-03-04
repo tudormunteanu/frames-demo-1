@@ -27,12 +27,15 @@ export async function GET(req: Request) {
           display: "flex",
           flexDirection: "column",
           padding: 20,
+          textAlign: "left",
+          color: "lightgray"
         }}>
-          <h2 style={{textAlign: "center", color: "lightgray"}}>
-            Done!
-
-            Correct answers: {score}
-          </h2>
+          <h2>Done!</h2>
+          <h2>Correct answers: {score}</h2>
+          <p>
+            This game is a basic demo for an upcoming
+            deep-dive tutorial into Farcaster Frames.
+          </p>
         </div>
       </div>
       ,

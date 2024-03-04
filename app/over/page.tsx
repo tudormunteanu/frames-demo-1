@@ -22,9 +22,12 @@ export async function generateMetadata(
     "fc:frame": "vNext",
     "fc:frame:post_url": `${API_BASE_URL}/next?version=${version}`,
     "fc:frame:image": imageUrl,
-    "fc:frame:button:1": "Are you better than your followers?",
+    "fc:frame:button:1": "Challenge your followers ‼️",
     "fc:frame:button:1:action": "link",
     "fc:frame:button:1:target": sharingUrl,
+    "fc:frame:button:2": "Follow author",
+    "fc:frame:button:2:action": "link",
+    "fc:frame:button:2:target": "https://warpcast.com/tudorizer",
   };
 
   return {
