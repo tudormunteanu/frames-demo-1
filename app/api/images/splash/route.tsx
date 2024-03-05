@@ -2,7 +2,7 @@
 
 import sharp from "sharp";
 import satori from "satori";
-import { join } from "path";
+import {join} from "path";
 import * as fs from "fs";
 
 const fontPath = join(process.cwd(), "Roboto-Regular.ttf");

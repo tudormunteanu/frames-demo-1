@@ -3,7 +3,7 @@ import satori from "satori";
 import {join} from "path";
 import * as fs from "fs";
 
-import { APP_URL } from "@/app/constants";
+import {APP_URL} from "@/app/constants";
 import {getGame} from "@/app/actions";
 
 
@@ -12,7 +12,7 @@ let fontData = fs.readFileSync(fontPath);
 
 export async function GET(req: Request) {
 
-  const { searchParams } = new URL(req.url);
+  const {searchParams} = new URL(req.url);
   const gameId = searchParams.get("gameId") as string;
   const game = await getGame(gameId);
 

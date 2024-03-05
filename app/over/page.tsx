@@ -6,7 +6,7 @@ import {MetadataProps} from "@/app/types";
 
 
 export async function generateMetadata(
-  { searchParams }: MetadataProps,
+  {searchParams}: MetadataProps,
 ): Promise<Metadata> {
 
   const version = await getFrameVersion();

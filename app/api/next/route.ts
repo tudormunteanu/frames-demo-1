@@ -1,8 +1,8 @@
 import {parseFramePayload} from "@/app/frames";
-import { getGameByFid, updateGame, isGameOver, resetGame } from "@/app/actions";
+import {getGameByFid, updateGame, isGameOver, resetGame} from "@/app/actions";
 
 export async function POST(req: Request) {
-  const { buttonIndex, fid } = await parseFramePayload(await req.json());  
+  const {buttonIndex, fid} = await parseFramePayload(await req.json());  
   const game = await getGameByFid(fid);
 
   if (!game) {

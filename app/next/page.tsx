@@ -6,12 +6,12 @@ import {MetadataProps} from "@/app/types";
 
 
 export async function generateMetadata(
-  { searchParams }: MetadataProps,
+  {searchParams}: MetadataProps,
 ): Promise<Metadata> {
 
   const version = await getFrameVersion();
 
-  const { gameId } = searchParams;
+  const {gameId} = searchParams;
 
   const imageUrl = `${API_BASE_URL}/images/level?gameId=${gameId}&version=${version}`;
 

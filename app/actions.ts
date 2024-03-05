@@ -1,7 +1,7 @@
 "use server";
 
-import { kv } from "@vercel/kv";
-import { Game, Level } from "@/app/types";
+import {kv} from "@vercel/kv";
+import {Game, Level} from "@/app/types";
 import {tmpLevels} from "@/app/constants";
 
 function getGameId(fid: number): string {

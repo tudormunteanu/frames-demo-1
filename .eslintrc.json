@@ -6,6 +6,7 @@
     // Require semicolons
     "semi": ["error", "always"],
     // Use double quotes for strings
-    "quotes": ["error", "double"]
+    "quotes": ["error", "double"],
+    "object-curly-spacing": ["error", "never"]
   }
 }

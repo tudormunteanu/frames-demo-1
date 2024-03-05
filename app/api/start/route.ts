@@ -1,9 +1,9 @@
 import {parseFramePayload} from "@/app/frames";
 import {getOrCreateGame} from "@/app/actions";
 
-export async function POST(req: Request) {    
+export async function POST(req: Request) {   
   try {
-    const { fid } = await parseFramePayload(await req.json());
+    const {fid} = await parseFramePayload(await req.json());
     const game = await getOrCreateGame(fid);
     const startUrl = `/start?gameId=${game.id}`;
 
