@@ -33,8 +33,8 @@ export async function GET(req: Request) {
           <h2>Done!</h2>
           <h2>Correct answers: {score}</h2>
           <p>
-            This game is a basic demo for an upcoming
-            deep-dive tutorial into Farcaster Frames.
+            This game is a basic demo for a tutorial for 
+            Farcaster Frames.
           </p>
         </div>
       </div>

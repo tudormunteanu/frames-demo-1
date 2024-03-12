@@ -28,6 +28,9 @@ export async function generateMetadata(
     "fc:frame:button:2": "Follow author",
     "fc:frame:button:2:action": "link",
     "fc:frame:button:2:target": "https://warpcast.com/tudorizer",
+    "fc:frame:button:3": "Read tutorial",
+    "fc:frame:button:3:action": "link",
+    "fc:frame:button:3:target": "https://paragraph.xyz/@tudorizer/not-your-average-frames-tutorial",
   };
 
   return {
